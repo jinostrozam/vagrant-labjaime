@@ -45,16 +45,19 @@ Vagrant.configure("2") do |config|
       sudo timedatectl set-timezone America/Santiago
       sudo echo "192.168.10.10 server.itzgeek.local" | sudo tee -a /etc/hosts
       sudo echo "192.168.10.20 client.itzgeek.local" | sudo tee -a /etc/hosts
-      wget https://apt.puppetlabs.com/puppet5-release-xenial.deb
-      sudo dpkg -i puppet5-release-xenial.deb
-      sudo apt-get update
-      sudo apt-get install -y puppetserver
+      wget --no-check-certificate -c https://apt.puppetlabs.com/puppet5-release-xenial.deb -O /tmp/puppet.deb
+      dpkg -i /tmp/puppet.deb
+      apt-get update
+      apt-get install -y puppetserver
+      sudo awk '{sub(/-Xms2g -Xmx2g/,"-Xms512m -Xmx512m")}1' /etc/default/puppetserver > tmp.txt && mv tmp.txt /etc/default/puppetserver
       sudo echo "" | sudo tee -a /etc/puppetlabs/puppet/puppet.conf
       sudo echo -e "ndns_alt_names = server.itzgeek.local,server" | sudo tee -a /etc/puppetlabs/puppet/puppet.conf
       sudo echo -e "[main]\ncertname = server.itzgeek.local\nserver = server.itzgeek.local\nenvironment = production\nruninterval = 15m" | sudo tee -a /etc/puppetlabs/puppet/puppet.conf
+      sudo locale-gen es_CL
+      sudo systemctl enable puppetserver
+      sudo systemctl start puppetserver
       SHELL
-      #sudo systemctl start puppetserver
-      #sudo systemctl enable puppetserver
+ 
    
   end
 
