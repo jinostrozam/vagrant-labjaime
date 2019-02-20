@@ -66,7 +66,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder "puppet/manifest", "/etc/puppetlabs/code/environments/production/manifests", type:"nfs", nfs_version: 4, nfs_udp: false
   config.vm.synced_folder "puppet/modules", "/etc/puppetlabs/code/environments/production/modules", type:"nfs", nfs_version: 4, nfs_udp: false
-  config.vm.synced_folder "html", "/var/www/html", type:"nfs", nfs_version: 4, nfs_udp: false
+  #config.vm.synced_folder "html", "/var/www/html", type:"nfs", nfs_version: 4, nfs_udp: false
 
 
   end

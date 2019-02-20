@@ -1,7 +1,19 @@
-node default {
+#node default {
+## test message
+#  notify {"This is the site.pp - you are on server ${hostname}.": }
+#  include nginx
+#}
 
-# test message
+node 'lbalancer.example.local' {
+# Test message
+  notify { "Debug output on ${hostname} node.": }
 
-  notify {"This is the site.pp - you are on server ${hostname}.": }
-  include nginx
+  include webapp,load_balancer,sudoers
+}
+
+node 'web01.example.local', 'web02.example.local' {
+# Test message
+  notify { "Debug output on ${hostname} node.": }
+
+  include webapp,sudoers
 }
