@@ -53,10 +53,10 @@ class nginx {
     enable => true,
   }
 
-  exec { 'git-pull':
-    command => "git pull",
-    cwd     => '/var/www/html/',
-    path    => '/usr/bin/:/bin/',
-  }
+ # exec { 'git-pull':
+ #   command => "git pull",
+ #   cwd     => '/var/www/html/',
+ #   path    => '/usr/bin/:/bin/',
+ # }
 
 }

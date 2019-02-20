@@ -44,7 +44,7 @@ Vagrant.configure("2") do |config|
       sudo ntpdate -u 0.ubuntu.pool.ntp.org
       sudo timedatectl set-timezone America/Santiago
       sudo echo "192.168.10.10 puppet.example.local" | sudo tee -a /etc/hosts
-      sudo echo "192.168.10.20 client.example.local" | sudo tee -a /etc/hosts
+      sudo echo "192.168.10.20 lbalancer.example.local" | sudo tee -a /etc/hosts
       sudo echo "192.168.10.30 web01.example.local" | sudo tee -a /etc/hosts
       sudo echo "192.168.10.40 web02.example.local" | sudo tee -a /etc/hosts
       wget --no-check-certificate -c https://apt.puppetlabs.com/puppet5-release-xenial.deb -O /tmp/puppet.deb
@@ -52,21 +52,21 @@ Vagrant.configure("2") do |config|
       apt-get update
       apt-get install -y puppetserver
       sudo awk '{sub(/-Xms2g -Xmx2g/,"-Xms512m -Xmx512m")}1' /etc/default/puppetserver > tmp.txt && mv tmp.txt /etc/default/puppetserver
-      sudo echo -e "ndns_alt_names = server.example.local,server" | sudo tee -a /etc/puppetlabs/puppet/puppet.conf
+      sudo echo -e "ndns_alt_names = puppet.example.local,server" | sudo tee -a /etc/puppetlabs/puppet/puppet.conf
       sudo echo "" | sudo tee -a /etc/puppetlabs/puppet/puppet.conf
       sudo echo -e "[main]\ncertname = puppet.example.local\nserver = puppet.example.local\nenvironment = production\nruninterval = 15m" | sudo tee -a /etc/puppetlabs/puppet/puppet.conf
       sudo locale-gen es_CL
       sudo systemctl enable puppetserver
       sudo systemctl start puppetserver
-      sudo sleep 20
-      sudo /opt/puppetlabs/bin/puppet cert sign -a
       SHELL
- 
+      #sudo sleep 20
+      #sudo /opt/puppetlabs/bin/puppet cert sign --all
+       
    # 3- Shared Folder
 
   config.vm.synced_folder "puppet/manifest", "/etc/puppetlabs/code/environments/production/manifests", type:"nfs", nfs_version: 4, nfs_udp: false
   config.vm.synced_folder "puppet/modules", "/etc/puppetlabs/code/environments/production/modules", type:"nfs", nfs_version: 4, nfs_udp: false
-
+  config.vm.synced_folder "html", "/var/www/html", type:"nfs", nfs_version: 4, nfs_udp: false
 
 
   end
@@ -148,7 +148,7 @@ Vagrant.configure("2") do |config|
       sudo ntpdate -u 0.ubuntu.pool.ntp.org
       sudo timedatectl set-timezone America/Santiago
       sudo echo "192.168.10.10 puppet.example.local" | sudo tee -a /etc/hosts
-      sudo echo "192.168.10.20 client.example.local" | sudo tee -a /etc/hosts
+      sudo echo "192.168.10.20 lbalancer.example.local" | sudo tee -a /etc/hosts
       sudo echo "192.168.10.30 web01.example.local" | sudo tee -a /etc/hosts
       sudo echo "192.168.10.40 web02.example.local" | sudo tee -a /etc/hosts
       wget --no-check-certificate -c https://apt.puppetlabs.com/puppet5-release-xenial.deb -O /tmp/puppet.deb
@@ -194,7 +194,7 @@ Vagrant.configure("2") do |config|
       sudo ntpdate -u 0.ubuntu.pool.ntp.org
       sudo timedatectl set-timezone America/Santiago
       sudo echo "192.168.10.10 puppet.example.local" | sudo tee -a /etc/hosts
-      sudo echo "192.168.10.20 client.example.local" | sudo tee -a /etc/hosts
+      sudo echo "192.168.10.20 lbalancer.example.local" | sudo tee -a /etc/hosts
       sudo echo "192.168.10.30 web01.example.local" | sudo tee -a /etc/hosts
       sudo echo "192.168.10.40 web02.example.local" | sudo tee -a /etc/hosts
       wget --no-check-certificate -c https://apt.puppetlabs.com/puppet5-release-xenial.deb -O /tmp/puppet.deb
@@ -210,7 +210,6 @@ Vagrant.configure("2") do |config|
   end
 
 end
-
 
 ## Sign Certs in Puppet Server
 # sudo /opt/puppetlabs/bin/puppet cert sign -a
